@@ -88,7 +88,7 @@
           default = self.packages.${system}.nipaplay-reload;
           nipaplay-reload = flutter.buildFlutterApplication {
             pname = "nipaplay";
-            version = "1.10.6";
+            version = "1.10.5";
 
             src = pkgs.lib.cleanSource self;
 
