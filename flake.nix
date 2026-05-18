@@ -98,6 +98,8 @@
 
             targetFlutterPlatform = "linux";
 
+            extraWrapProgramArgs = "--set GDK_BACKEND x11";
+
             customSourceBuilders = {
               rust_lib_nipaplay = { version, src, ... }:
                 pkgs.runCommand "rust_lib_nipaplay-${version}" {
