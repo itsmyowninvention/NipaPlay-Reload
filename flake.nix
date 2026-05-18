@@ -98,7 +98,7 @@
 
             targetFlutterPlatform = "linux";
 
-            extraWrapProgramArgs = "--set GDK_BACKEND x11";
+            extraWrapProgramArgs = "--set FLT_IMPELLER false";
 
             customSourceBuilders = {
               rust_lib_nipaplay = { version, src, ... }:
@@ -131,6 +131,22 @@
             ];
 
             dontUseCmakeConfigure = true;
+
+            postFixup = ''
+              for w in "$out/bin/"*; do
+                if [[ "$w" != *"-wrapped" ]] && [[ "$w" != *".real" ]] && [[ -f "$w" ]]; then
+                  mv "$w" "$w.real"
+                  cat > "$w" << 'SHEOF'
+              #!/bin/sh
+              "$0".real "$@"
+              rc=$?
+              [ $rc -gt 128 ] && [ $rc -le 192 ] && exit 0
+              exit $rc
+              SHEOF
+                  chmod +x "$w"
+                fi
+              done
+            '';
           };
         };
 
