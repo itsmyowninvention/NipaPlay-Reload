@@ -132,20 +132,15 @@
 
             dontUseCmakeConfigure = true;
 
-            postFixup = ''
-              for w in "$out/bin/"*; do
-                if [[ "$w" != *"-wrapped" ]] && [[ "$w" != *".real" ]] && [[ -f "$w" ]]; then
-                  mv "$w" "$w.real"
-                  cat > "$w" << 'SHEOF'
-              #!/bin/sh
-              "$0".real "$@"
-              rc=$?
-              [ $rc -gt 128 ] && [ $rc -le 192 ] && exit 0
-              exit $rc
-              SHEOF
-                  chmod +x "$w"
-                fi
-              done
+            postPatch = ''
+              # Suppress SEGV/ABRT during exit (mdk-sdk/OpenGL cleanup race)
+              sed -i '1i #include <signal.h>' linux/my_application.cc
+              sed -i '1i #include <stdlib.h>' linux/my_application.cc
+              sed -i '/^int main/,/^{/{
+                /^{/a\
+                \  signal(SIGSEGV, SIG_IGN);\
+                \  signal(SIGABRT, SIG_IGN);
+              }' linux/my_application.cc
             '';
           };
         };
