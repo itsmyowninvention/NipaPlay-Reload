@@ -98,7 +98,7 @@
 
             targetFlutterPlatform = "linux";
 
-            extraWrapProgramArgs = "--set FLT_IMPELLER false";
+            extraWrapProgramArgs = "--set FLT_IMPELLER false --prefix LD_LIBRARY_PATH : $out/app/nipaplay/lib";
 
             customSourceBuilders = {
               rust_lib_nipaplay = { version, src, ... }:
