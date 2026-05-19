@@ -128,6 +128,10 @@
               dbus
               gdk-pixbuf
               glib
+              libepoxy
+              libglvnd
+              mesa
+              wayland
             ];
 
             dontUseCmakeConfigure = true;
